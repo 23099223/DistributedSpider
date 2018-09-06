@@ -146,13 +146,13 @@ def save_ret(data: {}):
     length, dep_index = len(depth_list), depth_list.index(depth)
     if length == dep_index + 1:
         # 保存结果
-        pass
+        mrmg().r_lpush("ret_list", data.get("content"))
     else:
         # 保存url
         next_depth = depth_list[dep_index + 1]
         url_list = data.get("content")
-
-        pass
+        spider_list = [{"depth": next_depth, "url": url} for url in url_list]
+        mrmg().r_lpush(data.get("spider_id") + "_list", *spider_list)
 
 
 if __name__ == "__main__":
