@@ -63,11 +63,17 @@ class Master(socketserver.BaseRequestHandler):
         elif sig_type == "spide":
             if data.get("sig_type") == "spide":
                 self.save_ret(data)
+            # 将已爬取过的url从running池中删除
+            self.mrmg.r_hdel("running_map", data.get("url_info").get("url"))
+            ###### 应该是原子的
             url_info = self.mrmg.r_lpop(data.get("spider_id") + "_list")
             if url_info is None:
                 data["sig_type"] = "wait"
             else:
                 data["url_info"] = url_info
+                # 将获取的url保存到running池中
+                self.mrmg.r_hset("running_map", url_info.get("url"), url_info.get("depth"))
+            ######
         elif sig_type == "error":
             error_dcit = data.get("url_info")
             error_dcit["msg"] = data.get("ret_msg")
