@@ -11,9 +11,9 @@ packages = {
 
 # redis数据结构
 spider_id_list = [{"depth": "爬取层次,根据不同的层次使用不同的xpath", "url": "网址"}, {"depth": "", "url": ""}]  # url集合
-error_list = [] # 失败池
+error_list = []  # 失败池
 slave_id_set = ["slave_id_1", "slave_id_2", "..."]  # slave集合
 logout_set = ["slave_id_1", "slave_id_2", "..."]  # slave集合
 depth_list = ["xpath1", "xpath2", "xpath3", "..."]  # 严格保持顺序
-running_list = ["url", "url", "..."] # 正在爬取的url,爬取成功后删除,用于检查程序是否结束
-ret_list = [] # 最终结果
+running_map = {"url1": "depth", "url2": "depth"}  # 正在爬取的url,爬取成功后删除,用于检查程序是否结束
+ret_list = []  # 最终结果
