@@ -8,7 +8,7 @@ class MongoRedisManager:
     def __init__(self, server_ip: str = "localhost", client=None):
         self.client = MongoClient(server_ip, 27017) if client is None else client
         # self.redis_client: redis.StrictRedis = redis.StrictRedis(host=server_ip, port=6379, db=0, decode_responses=True)
-        self.redis_client = StrictRedisCluster(startup_nodes=config.startup_nodes,
+        self.redis_client = StrictRedisCluster(startup_nodes=config.startup_nodes, password="Redis@123!",
                                                decode_responses=True)
         self.db = self.client.spider
 
@@ -91,6 +91,10 @@ class MongoRedisManager:
         ret = self.redis_client.hgetall(name)
         return ret
 
+    def r_hdel(self, name, *keys):
+        """map:删除name中的一个key"""
+        self.redis_client.hdel(name, *keys)
+
     def r_sadd(self, key: str, *value):
         """set:插入集合"""
         self.redis_client.sadd(key, *value)
@@ -116,9 +120,11 @@ if __name__ == '__main__':
     # print(mongo_redis.r_lpop("strList"))
     # print(mongo_redis.r_llen("strList"))
     # print(mongo_redis.r_lrange("strList", 0, -1))
-    mongo_redis.r_hset("testMap", "tt", "test")
+    # mongo_redis.r_hset("testMap", "tt", "test")
     print(mongo_redis.r_hgetall("testMap"))
-    # mongo_redis.r_lpush("testList", random.randint(0,10))
+    # mongo_redis.r_lpush("testList", 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11)
     ll = mongo_redis.r_lrange("testList", 0, -1)
     print(ll)
-    print(ll.index("10"))
+    # tt = mongo_redis.r_lpop("testList")
+    # print(tt)
+    # print(type(tt))
