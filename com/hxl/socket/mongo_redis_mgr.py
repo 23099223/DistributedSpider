@@ -53,9 +53,17 @@ class MongoRedisManager:
         else:
             return {}
 
+    def r_exists(self, key):
+        """公共:检查key是否存在"""
+        return self.redis_client.exists(key)
+
     def r_lpush(self, key: str, *info):
         """list:向redis插入信息"""
         self.redis_client.lpush(key, *info)
+
+    def r_rpush(self, key: str, *info):
+        """list:向redis插入信息"""
+        self.redis_client.rpush(key, *info)
 
     def r_get(self, key: str) -> str:
         """str:根据key获取信息"""
