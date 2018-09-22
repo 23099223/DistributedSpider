@@ -17,3 +17,22 @@ logout_set = ["slave_id_1", "slave_id_2", "..."]  # slave集合
 depth_list = ["xpath1", "xpath2", "xpath3", "..."]  # 严格保持顺序
 running_map = {"url1": "depth", "url2": "depth"}  # 正在爬取的url,爬取成功后删除,用于检查程序是否结束
 ret_list = []  # 最终结果
+
+
+# 爬取流程
+"""
+1. 启动master
+2. 启动slave,向master请求进行登录验证
+3. 登录成功后,向master提供spider_id,master分派任务(spider_id_list),并将任务存入running_map中
+4. 当spider_id_list为空时,检查running_map是否为空,为空时则程序结束,不空时向slave发送wait信号
+5. 当slave获取到任务信息后,进行爬取,成功则返回结果.爬取失败次数达10次后返回error信息,
+由master将次任务保存到error_list中
+6. 当master收到结果信息后,根据depth获取下一个depth与返回结果包装成任务信息存入spider_id_list中
+或者确定是否是最后一个depth保存到ret_list中
+7. 每次收到slave请求时,master会检查slave_id是否存在logout_set中,是则发送logout信号终止slave任务
+
+
+爬取编号由slave提供
+
+"""
+
